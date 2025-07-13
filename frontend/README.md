@@ -170,6 +170,96 @@ Elle permet aux utilisateurs de s’inscrire, se connecter, et d’accéder à d
 - Les rôles sont décodés à partir du payload JWT.
 - Le contexte React (`AuthContext`) permet d’accéder à l’utilisateur connecté dans toute l’application.
 
+## Étape 3 – Gestion du profil utilisateur (Frontend)
+
+### 🎯 Objectif
+
+Permettre à l’utilisateur connecté :
+- D’afficher ses informations personnelles (prénom, nom, email, username)
+- De modifier son prénom, nom ou email via un formulaire
+- D’utiliser les routes sécurisées du backend (`GET` et `PUT /api/users/profile`)
+- De se déconnecter proprement avec redirection vers la page de connexion
+
+###  Fichiers créés et modifiés
+
+| Fichier                      | Rôle                                               |
+|-----------------------------|---------------------------------------------------|
+| `src/pages/Profile.jsx`      | Page principale de profil (avec bouton déconnexion) |
+| `src/components/ProfileForm.jsx` | Formulaire de modification du profil           |
+| `src/services/userService.js` | Appels API vers le backend (récupération + mise à jour) |
+| `src/context/AuthContext.jsx` | Gestion globale de l’authentification et fonction `logout` |
+
+### Sécurité
+
+- Le token JWT est automatiquement transmis via l’intercepteur Axios
+- Le profil n’est accessible que pour les utilisateurs authentifiés
+- Le `username` n’est **pas modifiable**, le `role` n’est **pas visible**
+- La déconnexion supprime le token et redirige vers `/login`
+
+---
+
+### ✅ Fonctionnalités couvertes
+
+- Appel `GET /api/users/profile`
+- Appel `PUT /api/users/profile`
+- Affichage dynamique et mise à jour en temps réel
+- Notifications avec `react-toastify`
+- Gestion de la déconnexion via le contexte d’authentification
+- Bouton "Se déconnecter" visible uniquement quand l’utilisateur est connecté
+- Redirection automatique vers la page de connexion après déconnexion
+
+# 🧪 Tests
+
+## Pré-requis
+- Être connecté avec un utilisateur valide (`CLIENT` ou `ADMIN`)
+- Le token JWT est présent dans le `localStorage`
+- Le frontend (`http://localhost:5173`) est lancé
+- Le backend (`http://localhost:8080`) est fonctionnel
+
+---
+
+## Test 1 : Affichage du profil
+
+1. Se connecter via `/login`
+2. Accéder à `/profile`
+3. Vérifier que le formulaire est pré-rempli avec :
+   - prénom, nom, email (éditables)
+   - nom d’utilisateur (lecture seule)
+
+✅ Résultat attendu :
+- Les données proviennent de `/api/users/profile` (GET)
+- En cas d'échec ou token invalide → redirection vers `/login`
+
+## Test 2 : Mise à jour du profil
+
+1. Modifier le prénom, le nom ou l’email
+2. Cliquer sur **Mettre à jour le profil**
+
+✅ Résultat attendu :
+- Requête `PUT /api/users/profile` envoyée avec succès
+- Notification Toast : « Profil mis à jour avec succès »
+- Le formulaire affiche les nouvelles données
+
+## Test 3 : Déconnexion
+
+1. Depuis `/profile`, cliquer sur **Déconnexion**
+2. Observer la redirection automatique vers `/login`
+
+✅ Résultat attendu :
+- Le token JWT est supprimé du `localStorage`
+- Le contexte utilisateur est réinitialisé (`user === null`)
+- Les liens "Connexion" et "Inscription" réapparaissent dans la Navbar
+
+## Sécurité
+
+- Les pages `/profile` et `/api/users/profile` sont protégées par JWT
+- Sans token valide :
+  - Accès refusé côté backend (401)
+  - Redirection vers `/login` côté frontend
+
+
+
+
 
 
 
