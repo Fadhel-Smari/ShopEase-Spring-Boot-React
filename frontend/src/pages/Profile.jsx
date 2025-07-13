@@ -1,17 +1,23 @@
 /**
- * Composant React fonctionnel affichant une section de profil utilisateur.
- * 
- * 
+ * @file Profile.jsx
+ * @description Page de profil utilisateur dans l'application ShopEase.
+ * Affiche un titre et rend le composant <ProfileForm /> pour consulter et modifier le profil de l'utilisateur connecté.
+ * Cette page est protégée et accessible uniquement après authentification via JWT (côté frontend et backend).
  * @author Fadhel Smari
- * 
  */
 
+import ProfileForm from "../components/ProfileForm";
 
+/**
+ * @component Profile
+ * @description Composant de page affichant le formulaire de profil utilisateur.
+ * @returns {JSX.Element} La page contenant le titre et le formulaire du profil.
+ */
 const Profile = () => {
   return (
     <div className="p-6">
-      <h2 className="text-xl font-bold">Profil utilisateur</h2>
-      <p>Contenu du profil à venir...</p>
+      <h2 className="text-2xl font-bold mb-4">Mon profil</h2>
+      <ProfileForm />
     </div>
   );
 };
