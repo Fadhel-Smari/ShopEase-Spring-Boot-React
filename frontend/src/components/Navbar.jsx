@@ -1,23 +1,58 @@
 /**
- * Barre de navigation principale de l'application ShopEase.
- *
- * Affiche le nom de l'application et trois liens :
- * Accueil, Connexion et Inscription.
- *
- * @component
- * @returns {JSX.Element} Le composant Navbar
+ * @file Navbar.jsx
+ * @description Barre de navigation principale de l'application ShopEase.
+ * Affiche dynamiquement les liens selon que l'utilisateur est connecté ou non.
+ * Si l'utilisateur est connecté : liens Accueil, Profil, Déconnexion.
+ * Sinon : liens Accueil, Connexion, Inscription.
+ * @author Fadhel Smari
  */
 
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
+/**
+ * @component Navbar
+ * @returns {JSX.Element} Le composant Navbar affichant les liens de navigation.
+ */
 const Navbar = () => {
+  const { user, logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <nav className="bg-blue-600 text-white px-4 py-3 flex justify-between items-center">
       <h1 className="text-xl font-bold">ShopEase</h1>
       <div className="space-x-4">
-        <Link to="/" className="hover:underline">Accueil</Link>
-        <Link to="/login" className="hover:underline">Connexion</Link>
-        <Link to="/register" className="hover:underline">Inscription</Link>
+        <Link to="/" className="hover:underline">
+          Accueil
+        </Link>
+
+        {user ? (
+          <>
+            <Link to="/profile" className="hover:underline">
+              Profil
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="hover:underline bg-transparent border-none cursor-pointer"
+              style={{ color: "inherit", fontSize: "inherit" }}
+            >
+              Déconnexion
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="hover:underline">
+              Connexion
+            </Link>
+            <Link to="/register" className="hover:underline">
+              Inscription
+            </Link>
+          </>
+        )}
       </div>
     </nav>
   );
