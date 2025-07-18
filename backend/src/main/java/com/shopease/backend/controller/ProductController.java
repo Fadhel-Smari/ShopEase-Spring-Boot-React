@@ -42,7 +42,6 @@ public class ProductController {
      * @return liste des produits au format ProductResponse
      */
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
     public List<ProductResponse> getAllProducts() {
         return productService.getAllProducts();
     }
@@ -54,7 +53,6 @@ public class ProductController {
      * @return le produit trouvé au format ProductResponse
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
     public ProductResponse getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
@@ -103,7 +101,6 @@ public class ProductController {
      * @return liste des produits correspondant aux filtres
      */
     @PostMapping("/search")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
     public List<ProductResponse> searchProducts(@RequestBody ProductFilterRequest filterRequest) {
         return productService.searchProducts(filterRequest);
     }

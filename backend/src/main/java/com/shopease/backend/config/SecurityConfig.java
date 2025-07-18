@@ -43,12 +43,16 @@ public class SecurityConfig {
 
     public static final String AUTH = "/api/auth/**";
     public static final String PAYMENTS_WEBHOOK = "/api/payments/webhook";
+    public static final String PUBLIC_PRODUCTS = "/api/products";
+    public static final String PUBLIC_PRODUCT_BY_ID = "/api/products/**";
+    public static final String PUBLIC_PRODUCT_SEARCH = "/api/products/search";
+    public static final String PUBLIC_CATEGORIES = "/api/categories";
 
     /**
      * Configure la chaîne de filtres de sécurité.
      *
      * - Désactive CSRF (utile pour les API REST stateless)
-     * - Autorise librement toutes les requêtes vers /api/auth/**
+     * - Autorise librement toutes les requêtes vers /api/auth/** et api/payments/webhook
      * - Exige l’authentification pour toute autre requête
      * - Utilise un AuthenticationProvider personnalisé
      * - Ajoute un filtre JWT avant le filtre d’authentification par username/password
@@ -64,7 +68,14 @@ public class SecurityConfig {
                 // Active CORS avec une configuration personnalisée
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(AUTH, PAYMENTS_WEBHOOK).permitAll() // Autorise l'accès libre aux endpoints d'auth
+                        .requestMatchers(
+                                AUTH,
+                                PAYMENTS_WEBHOOK,
+                                PUBLIC_PRODUCTS,
+                                PUBLIC_PRODUCT_BY_ID,
+                                PUBLIC_PRODUCT_SEARCH,
+                                PUBLIC_CATEGORIES
+                        ).permitAll() // Autorise l'accès libre aux endpoints spécifiés précédemment
                         .anyRequest().authenticated() // Toutes les autres requêtes doivent être authentifiées
                 )
                 .authenticationProvider(authenticationProvider()) // Utilise un fournisseur d’authentification personnalisé
