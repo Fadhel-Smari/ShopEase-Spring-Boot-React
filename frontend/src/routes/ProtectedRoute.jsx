@@ -17,7 +17,11 @@ import { useAuth } from "../context/AuthContext";
  * @param {Array} allowedRoles - Les rôles autorisés à accéder à cette route
  */
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { user } = useAuth();
+  const { user , loading} = useAuth();
+
+  if (loading) {
+    return <div className="p-6 text-center">Chargement...</div>;
+  }
 
   if (!user) {
     // Non connecté : redirection vers la page de connexion

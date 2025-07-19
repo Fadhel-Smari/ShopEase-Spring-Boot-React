@@ -24,6 +24,7 @@ const AuthContext = createContext();
  */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   /**
@@ -40,6 +41,7 @@ export const AuthProvider = ({ children }) => {
         role: payload.role,
       });
     }
+    setLoading(false);
   }, []);
 
   /**
@@ -67,7 +69,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
