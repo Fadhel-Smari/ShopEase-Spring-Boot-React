@@ -7,7 +7,7 @@
  * @author Fadhel Smari
  */
 
-
+import { getToken } from "../utils/tokenUtils";
 import axios from "axios";
 
 
@@ -23,8 +23,8 @@ const api = axios.create({
 
 // Ajoute un intercepteur à l'instance Axios pour injecter le token JWT dans chaque requête sortante
 api.interceptors.request.use((config) => {
-  // Récupère le jeton JWT depuis le localStorage  
-  const token = localStorage.getItem("token");
+  // Récupère le jeton JWT 
+  const token = getToken();
   if (token) {
     // Ajoute le jeton dans l'en-tête Authorization
     config.headers.Authorization = `Bearer ${token}`;

@@ -7,6 +7,7 @@
  * @author Fadhel Smari
  */
 
+import { saveToken, removeToken } from "../utils/tokenUtils";
 import api from "./api";
 
 const AUTH_API = "/auth";
@@ -31,7 +32,8 @@ export const login = async (credentials) => {
   const token = response.data.token;
 
   if (token) {
-    localStorage.setItem("token", token);
+    //Sauvegarde un token dans le localStorage
+    saveToken(token);
   }
 
   return response.data;
@@ -41,5 +43,5 @@ export const login = async (credentials) => {
  * Supprime le token JWT stocké localement, déconnectant ainsi l'utilisateur.
  */
 export const logout = () => {
-  localStorage.removeItem("token");
+  removeToken();
 };
