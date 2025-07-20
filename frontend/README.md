@@ -258,6 +258,96 @@ Permettre à l’utilisateur connecté :
   - Redirection vers `/login` côté frontend
 
 
+## Étape 4 – Catalogue Produits (Frontend)
+
+Cette étape permet d'afficher dynamiquement le catalogue des produits de ShopEase avec des filtres (nom, catégorie, prix), un affichage individuel des produits, et une intégration complète avec l’API backend.
+
+### 🎯 Objectif
+
+- Affichage de la liste des produits depuis `/api/products`
+- Mise en place de filtres dynamiques avec `/api/products/search`
+- Affichage des détails d’un produit (`/api/products/:id`)
+- Chargement dynamique des catégories via `/api/categories`
+- Routing, composants réutilisables, intégration au layout
+
+
+## Fichiers créés
+
+### 4.1 – Service `productService.js`
+📁 `src/services/productService.js`
+
+- `getAllProducts()` → `GET /api/products`
+- `searchProducts(filters)` → `POST /api/products/search`
+- `getProductById(id)` → `GET /api/products/:id`
+
+### 4.2 – Service `categoryService.js`
+📁 `src/services/categoryService.js`
+
+- `getAllCategories()` → `GET /api/categories`
+
+### 4.3 – Composant `ProductCard.jsx`
+📁 `src/components/ProductCard.jsx`
+
+- Affiche un produit (image, nom, prix)
+- Redirection vers `/products/:id` au clic
+
+### 4.4 – Composant `ProductFilters.jsx`
+📁 `src/components/ProductFilters.jsx`
+
+- Filtres dynamiques : nom, catégorie, prix min/max
+- Chargement des catégories à partir de l’API
+
+### 4.5 – Page `ProductList.jsx`
+📁 `src/pages/ProductList.jsx`
+
+- Affiche la grille de produits + formulaire de recherche
+- Appelle le service selon les filtres appliqués
+
+### 4.6 – Page `ProductDetails.jsx`
+📁 `src/pages/ProductDetails.jsx`
+
+- Affiche les détails d’un produit : image, nom, description, prix, stock, catégorie
+
+### 4.7 – Ajout des routes
+📄 `src/App.jsx`
+
+- Route `/products` → `ProductList`
+- Route `/products/:id` → `ProductDetails`
+
+---
+
+## 🛠️ Fixations & Améliorations complémentaires
+
+- ✅ Mise à jour de `SecurityConfig` (backend) pour permettre l'accès public à `/api/products`, `/api/products/search`, `/api/products/:id` et `/api/categories`
+- ✅ Gestion unifiée du token JWT dans `api.js` avec intercepteur Axios
+- ✅ Attente du chargement du contexte `AuthContext` avant de protéger les routes
+- ✅ Empêche la redirection vers `/login` lors d’un `F5` (refresh) avec un état `isLoading`
+- ✅ Ajout d’un bouton vers `/products` sur la page d’accueil
+- ✅ Correction de l'affichage du nom de la catégorie dans `ProductDetails`
+
+---
+
+## 🧪 Tests manuels
+
+### 🎯 Vérification générale :
+- [ ] Le lien "Voir les produits" dans la page d’accueil redirige vers `/products`
+- [ ] Les produits s’affichent bien en grille
+- [ ] Chaque produit affiche son image, nom, prix
+- [ ] Cliquer sur un produit ouvre la page `/products/:id` avec les détails complets
+- [ ] Les champs de recherche permettent de filtrer par :
+  - Nom
+  - Catégorie (via menu déroulant chargé dynamiquement)
+  - Prix min / max
+
+### ⚠️ Cas particuliers à tester :
+- [ ] Aucun résultat ne plante l’interface (message "Aucun produit trouvé")
+- [ ] Le lien direct `/products/:id` fonctionne même sans être connecté
+- [ ] Une recherche avec prix négatif ou vide ne plante pas
+
+---
+
+
+
 
 
 
