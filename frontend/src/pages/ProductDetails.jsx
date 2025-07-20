@@ -18,13 +18,10 @@ import { getProductById } from '../services/productService';
  * @returns {JSX.Element} Détails complets du produit ou message de chargement.
  */
 const ProductDetails = () => {
-  // Extraction de l’ID du produit depuis les paramètres d’URL
   const { id } = useParams();
-
-  // État local pour stocker les données du produit récupéré
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true); // ajout d’un état de chargement
 
-  // Effet pour charger les détails du produit dès que l’ID change
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -32,18 +29,22 @@ const ProductDetails = () => {
         setProduct(data);
       } catch (error) {
         console.error('Erreur lors du chargement du produit', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProduct();
   }, [id]);
 
-  // Affichage pendant le chargement des données produit
-  if (!product) {
+  if (loading) {
     return <div className="text-center py-8">Chargement du produit...</div>;
   }
 
-  // Affichage des détails du produit
+  if (!product) {
+    return <div className="text-center py-8 text-red-600">Produit introuvable.</div>;
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -58,12 +59,16 @@ const ProductDetails = () => {
         <div>
           <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
           <p className="text-gray-700 mb-4">{product.description}</p>
-          <p className="text-xl font-semibold mb-2">${product.price.toFixed(2)}</p>
+          <p className="text-xl font-semibold mb-2">
+            ${product.price?.toFixed(2) ?? '0.00'}
+          </p>
           <p className={`mb-4 ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
             {product.stock > 0 ? `${product.stock} en stock` : 'Rupture de stock'}
           </p>
 
-          <p className="text-sm text-gray-500">Catégorie : {product.category.name}</p>
+          <p className="text-sm text-gray-500">
+            Catégorie : {product.categoryName || 'Non spécifiée'}
+          </p>
         </div>
       </div>
     </div>
