@@ -16,12 +16,13 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
+import Checkout from "./pages/Checkout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import ProductList from "./pages/ProductList";
 import ProductDetails from "./pages/ProductDetails";
-import CartPage from "./pages/CartPage"; // ✅ AJOUTÉ
+import CartPage from "./pages/CartPage";
 
 /**
  * @component App
@@ -52,14 +53,24 @@ function App() {
                 <Route path="/products/:id" element={<ProductDetails />} />
 
                 {/* Panier */}
-                <Route path="/cart" element={<CartPage />} /> {/* ✅ AJOUTÉ */}
+                <Route path="/cart" element={<CartPage />} />
 
-                {/* Route protégée : accès réservé aux utilisateurs CLIENT et ADMIN */}
+                {/* Profil utilisateur (authentifié) */}
                 <Route
                   path="/profile"
                   element={
-                    <ProtectedRoute roles={["CLIENT", "ADMIN"]}>
+                    <ProtectedRoute allowedRoles={["CLIENT", "ADMIN"]}>
                       <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Route Checkout protégée (authentifié, tout rôle) */}
+                <Route
+                  path="/checkout"
+                  element={
+                    <ProtectedRoute>
+                      <Checkout />
                     </ProtectedRoute>
                   }
                 />
