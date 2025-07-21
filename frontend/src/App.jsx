@@ -3,7 +3,7 @@
  * @description Point d'entrée principal de l'application React ShopEase.
  * Configure le routage client avec React Router, incluant les routes publiques,
  * les pages produits, et les routes protégées nécessitant une authentification.
- * Utilise le contexte d'authentification pour gérer les accès selon les rôles utilisateur.
+ * Utilise le contexte d'authentification et le contexte du panier.
  * Inclut la barre de navigation, le pied de page, et le wrapper global de l'app.
  * @author Fadhel Smari
  */
@@ -18,6 +18,7 @@ import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
 import ProductList from "./pages/ProductList";
 import ProductDetails from "./pages/ProductDetails";
 
@@ -32,40 +33,42 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="flex flex-col min-h-screen">
-          {/* Barre de navigation visible sur toutes les pages */}
-          <Navbar />
+        <CartProvider>
+          <div className="flex flex-col min-h-screen">
+            {/* Barre de navigation visible sur toutes les pages */}
+            <Navbar />
 
-          {/* Contenu principal de chaque page */}
-          <main className="flex-grow">
-            <Routes>
-              {/* Routes publiques accessibles sans authentification */}
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+            {/* Contenu principal de chaque page */}
+            <main className="flex-grow">
+              <Routes>
+                {/* Routes publiques accessibles sans authentification */}
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-              {/* Catalogue des produits */}
-              <Route path="/products" element={<ProductList />} />
-              <Route path="/products/:id" element={<ProductDetails />} />
+                {/* Catalogue des produits */}
+                <Route path="/products" element={<ProductList />} />
+                <Route path="/products/:id" element={<ProductDetails />} />
 
-              {/* Route protégée : accès réservé aux utilisateurs CLIENT et ADMIN */}
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute roles={["CLIENT", "ADMIN"]}>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
+                {/* Route protégée : accès réservé aux utilisateurs CLIENT et ADMIN */}
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute roles={["CLIENT", "ADMIN"]}>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* Route de secours : page 404 pour les chemins inconnus */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
+                {/* Route de secours : page 404 pour les chemins inconnus */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
 
-          {/* Pied de page visible sur toutes les pages */}
-          <Footer />
-        </div>
+            {/* Pied de page visible sur toutes les pages */}
+            <Footer />
+          </div>
+        </CartProvider>
       </AuthProvider>
     </Router>
   );
