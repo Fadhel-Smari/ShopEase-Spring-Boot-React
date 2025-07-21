@@ -3,6 +3,7 @@
  * @description Fournit un contexte React global pour la gestion du panier dans l'application ShopEase.
  * Permet d'ajouter, retirer, mettre à jour la quantité d’un produit et vider le panier.
  * Les données du panier sont persistées dans le localStorage pour conserver l’état entre les sessions utilisateur.
+ * Ajoute également une fonction pour calculer le prix total du panier (`getTotalPrice`).
  * @author Fadhel Smari
  */
 
@@ -91,10 +92,29 @@ export const CartProvider = ({ children }) => {
     setCartItems([]);
   };
 
+  /**
+   * @function getTotalPrice
+   * @description Calcule le prix total de tous les articles du panier.
+   * @returns {number} Montant total du panier.
+   */
+  const getTotalPrice = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  };
+
   // Fournisseur du contexte avec les fonctions et les données du panier
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart }}
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        getTotalPrice, // ✅ Exporté ici
+      }}
     >
       {children}
     </CartContext.Provider>
