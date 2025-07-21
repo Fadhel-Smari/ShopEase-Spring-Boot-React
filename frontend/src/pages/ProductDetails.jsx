@@ -3,12 +3,14 @@
  * @description Composant React affichant les détails d’un produit spécifique.
  * Récupère les informations d’un produit via l’API ShopEase en fonction de l’ID dans l’URL.
  * Affiche l’image, le nom, la description, le prix, la disponibilité en stock et la catégorie.
- * @author Fadhel Smari
+ * Ajoute un bouton “Ajouter au panier” si le produit est en stock.
+ * @author Fadhel
  */
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getProductById } from '../services/productService';
+import { useCart } from '../context/CartContext'; // ✅ ajout ici
 
 /**
  * @component ProductDetails
@@ -20,7 +22,8 @@ import { getProductById } from '../services/productService';
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true); // ajout d’un état de chargement
+  const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart(); // ✅ hook pour ajouter au panier
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -66,9 +69,19 @@ const ProductDetails = () => {
             {product.stock > 0 ? `${product.stock} en stock` : 'Rupture de stock'}
           </p>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 mb-6">
             Catégorie : {product.categoryName || 'Non spécifiée'}
           </p>
+
+          {/* ✅ Bouton Ajouter au panier si stock > 0 */}
+          {product.stock > 0 && (
+            <button
+              onClick={() => addToCart(product)}
+              className="bg-blue-600 text-white font-semibold px-6 py-2 rounded hover:bg-blue-700"
+            >
+              Ajouter au panier
+            </button>
+          )}
         </div>
       </div>
     </div>
