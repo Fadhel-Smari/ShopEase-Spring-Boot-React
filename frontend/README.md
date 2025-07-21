@@ -347,6 +347,99 @@ Cette étape permet d'afficher dynamiquement le catalogue des produits de ShopEa
 ---
 
 
+## Étape 5 — Panier (Cart)
+
+## Objectifs
+
+- Permettre à l’utilisateur d’ajouter, retirer et modifier la quantité des produits dans le panier.
+- Afficher le contenu du panier avec nom, image, quantité, prix unitaire et total.
+- Sauvegarder le panier côté client dans `localStorage` pour conserver la session panier anonyme.
+- Préparer la base pour une sauvegarde via API pour utilisateurs connectés (à venir).
+
+---
+
+## Structure des fichiers ajoutés / modifiés
+
+| Fichier                             | Description                                                                 |
+|------------------------------------|-----------------------------------------------------------------------------|
+| `src/context/CartContext.jsx`      | Contexte React global pour gérer le panier et le stocker dans localStorage |
+| `src/pages/CartPage.jsx`           | Page affichant la liste des produits du panier, total, et bouton “Passer à la commande” |
+| `src/components/CartItem.jsx`      | Composant affichant un produit du panier avec quantité modifiable et bouton suppression |
+| `src/components/ProductCard.jsx`   | Ajout d’un bouton “Ajouter au panier” dans la liste des produits           |
+| `src/pages/ProductDetails.jsx`     | Ajout du bouton “Ajouter au panier” dans la page de détails d’un produit   |
+| `src/components/Navbar.jsx`        | Ajout du lien visible "Panier" qui redirige vers la page `/cart`           |
+| `src/App.jsx`                      | Intégration du `<CartProvider>` pour fournir le contexte global du panier et déclaration de la route `/cart` |
+
+---
+
+## Fonctionnalités principales
+
+- **Gestion du panier** via `CartContext` avec méthodes :
+  - `addToCart(product)`
+  - `removeFromCart(productId)`
+  - `updateQuantity(productId, quantity)`
+  - Sauvegarde automatique dans `localStorage` à chaque modification
+
+- **Page panier** :
+  - Affiche tous les items du panier
+  - Calcule et affiche le total
+  - Permet de modifier la quantité ou supprimer un produit
+  - Bouton “Passer à la commande” redirige vers `/checkout`
+
+- **Composant `CartItem`** :
+  - Affiche image, nom, prix unitaire
+  - Input nombre pour modifier quantité (min 1)
+  - Bouton suppression
+
+- **Bouton “Ajouter au panier”** dans :
+  - `ProductCard` (liste des produits)
+  - `ProductDetails` (page d’un produit spécifique)
+
+- **Navigation et intégration** :
+  - Lien “Panier” ajouté dans la barre de navigation (`Navbar`)
+  - Nouvelle route `/cart` définie dans `App.jsx`
+  - Fourniture du contexte panier (`CartContext`) à toute l’application via le composant `<CartProvider>`
+
+---
+
+## Tests manuels recommandés
+
+1. **Ajouter un produit au panier**
+   - Aller dans le catalogue
+   - Cliquer sur “Ajouter au panier” sur un produit
+   - Vérifier que le produit apparaît dans le panier (page `/cart`) avec quantité = 1
+
+2. **Ajouter depuis la page d’un produit**
+   - Aller sur `/products/:id`
+   - Cliquer sur “Ajouter au panier”
+   - Vérifier que le produit est bien ajouté
+
+3. **Modifier la quantité**
+   - Dans la page panier, modifier la quantité via l’input numérique
+   - Vérifier que le total et la quantité s’ajustent correctement
+   - Mettre quantité à 0 ou un nombre négatif → produit retiré du panier
+
+4. **Supprimer un produit**
+   - Cliquer sur la croix “×” à droite d’un produit dans la page panier
+   - Vérifier qu’il disparaît du panier
+
+5. **Persistance du panier**
+   - Ajouter un ou plusieurs produits au panier
+   - Recharger la page ou fermer/rouvrir le navigateur
+   - Vérifier que le panier est toujours rempli (grâce au localStorage)
+
+6. **Navigation au checkout**
+   - Depuis la page panier, cliquer sur “Passer à la commande”
+   - Vérifier la redirection vers la page `/checkout` (à implémenter)
+
+---
+
+## Remarques
+
+- La gestion panier via API pour utilisateur connecté sera ajoutée dans les étapes suivantes.
+- Les styles sont basiques et peuvent être améliorés pour une meilleure UX.
+- La validation des quantités est minimale, à renforcer dans les étapes futures.
+
 
 
 
