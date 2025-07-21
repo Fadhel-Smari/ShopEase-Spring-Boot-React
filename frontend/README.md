@@ -327,7 +327,7 @@ Cette étape permet d'afficher dynamiquement le catalogue des produits de ShopEa
 
 ---
 
-## 🧪 Tests manuels
+## 🧪 Tests
 
 ### 🎯 Vérification générale :
 - [ ] Le lien "Voir les produits" dans la page d’accueil redirige vers `/products`
@@ -402,7 +402,7 @@ Cette étape permet d'afficher dynamiquement le catalogue des produits de ShopEa
 
 ---
 
-## Tests manuels recommandés
+## 🧪 Tests
 
 1. **Ajouter un produit au panier**
    - Aller dans le catalogue
@@ -440,9 +440,80 @@ Cette étape permet d'afficher dynamiquement le catalogue des produits de ShopEa
 - Les styles sont basiques et peuvent être améliorés pour une meilleure UX.
 - La validation des quantités est minimale, à renforcer dans les étapes futures.
 
+# Étape 6 — Commande (Checkout résumé)
 
+## Objectifs
 
+- Afficher une page de récapitulatif de commande basée sur le contenu du panier.
+- Afficher les informations utilisateur (nom, email).
+- Permettre la validation de la commande via un bouton.
+- Envoyer la commande au backend avec la route `POST /api/orders`.
+- Protéger la page `/checkout` pour les utilisateurs authentifiés uniquement.
+- Ajouter un bouton “Passer à la commande” dans la page Panier pour accéder au checkout.
 
+---
 
+## Fichiers créés / modifiés
 
+- `src/pages/Checkout.jsx`
+  Page affichant le résumé de la commande et permettant de la valider.
+
+- `src/services/orderService.js`
+  Service pour envoyer la commande au backend.
+
+- `src/routes/ProtectedRoute.jsx` (existant)
+  Composant protégeant les routes selon authentification et rôle.
+
+- `src/App.jsx`
+  Ajout de la route protégée `/checkout`.
+
+- `src/pages/CartPage.jsx`
+  Ajout d’un bouton “Passer à la commande” redirigeant vers `/checkout`.
+
+- `src/context/CartContext.jsx`
+  Ajout de la fonction `getTotalPrice()` pour calculer le total du panier.
+
+---
+
+## Fonctionnalités clés
+
+- La page `/checkout` affiche les produits, quantités, total et infos utilisateur.
+- Le bouton “Valider la commande” appelle le service `createOrder`.
+- Après création réussie, le panier est vidé et la navigation vers `/orders/:id` est déclenchée.
+- La route `/checkout` est accessible uniquement si l’utilisateur est connecté.
+- Le bouton “Passer à la commande” est visible sur la page panier quand le panier n’est pas vide.
+
+---
+
+## 🧪 Tests
+
+### Fonctionnels
+
+1. **Accès à la page `/checkout` :**
+   - Non connecté → redirection vers `/login`.
+   - Connecté → accès autorisé.
+
+2. **Affichage de la page `/checkout` :**
+   - Affiche tous les articles du panier avec noms, quantités, prix.
+   - Affiche les informations utilisateur (nom, email).
+   - Affiche le total correct.
+
+3. **Bouton “Passer à la commande” dans le panier :**
+   - Présent uniquement si le panier contient au moins un article.
+   - Redirige vers `/checkout` au clic.
+
+4. **Validation de la commande :**
+   - Envoi correct du payload au backend (`items` avec `productId` et `quantity`).
+   - En cas de succès, redirection vers `/orders/:id` et panier vidé.
+   - En cas d’erreur, message d’erreur affiché.
+
+### Techniques
+
+5. **Persistance du panier :**
+   - Le panier est bien sauvegardé dans `localStorage` et restauré au rechargement.
+
+6. **Protection des routes :**
+   - Vérifier que `/checkout` n’est accessible qu’aux utilisateurs authentifiés.
+
+---
 
