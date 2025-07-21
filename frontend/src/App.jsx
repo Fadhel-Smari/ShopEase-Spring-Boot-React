@@ -21,6 +21,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import ProductList from "./pages/ProductList";
 import ProductDetails from "./pages/ProductDetails";
+import CartPage from "./pages/CartPage"; // ✅ AJOUTÉ
 
 /**
  * @component App
@@ -49,6 +50,9 @@ function App() {
                 {/* Catalogue des produits */}
                 <Route path="/products" element={<ProductList />} />
                 <Route path="/products/:id" element={<ProductDetails />} />
+
+                {/* Panier */}
+                <Route path="/cart" element={<CartPage />} /> {/* ✅ AJOUTÉ */}
 
                 {/* Route protégée : accès réservé aux utilisateurs CLIENT et ADMIN */}
                 <Route
