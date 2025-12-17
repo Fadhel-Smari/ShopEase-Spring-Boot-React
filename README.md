@@ -408,4 +408,4 @@ Configurer la sécurité de l’application pour :
 - Définit un `SecurityFilterChain` avec les règles de sécurité
 - Utilise les nouvelles méthodes recommandées dans Spring Security 6.2+
 - Fournit un bean `PasswordEncoder` pour encoder les mots de passe
-- Fournit un bean `AuthenticationManager` nécessaire pour l’authentification dans le service
+- Fournit un bean `AuthenticationManager` nécessaire pour l’authentification dans le service.
